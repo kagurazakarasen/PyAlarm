@@ -9,7 +9,9 @@ import datetime
 
 import scrollphathd
 
-TIMEVIEWON = False # 毎分表示している時刻の表示をするかどうか（夜通し光るのは五月蠅い）Falseならば表示しない
+import subprocess
+
+TIMEVIEWON = False # 毎分表示している時刻の表示をするかどうか（夜通し光るのはうるさそう）Falseならば表示しない
 
 #scrollphathd.rotate(degrees=180) # 向きを変えたい時はここで角度を設定
 
@@ -18,14 +20,15 @@ alm_time_file = "/home/pi/alm_time.txt"
 # ファイルからターゲットタイム読み込み
 with open(alm_time_file) as f: 
     s = f.read()
-    print("Target Time > "+ s.rstrip())
+    print("Target Time > "+ s.rstrip()) 
 
 now = datetime.datetime.now()    # 現在の時刻を取得 
 
 nowTimeString=str(now.hour).zfill(2)+str(now.minute).zfill(2)   # 時間＋分を０を頭につけた2桁で文字列化
 
-if( s.rstrip() == nowTimeString):   # ターゲットタイムと会っているか判定
+if( s.rstrip() == nowTimeString):   # ターゲットタイムとあっているか判定　rstrip()は、\n をカットする chomp
     print("It's NOW!!")
+    subprocess.Popen("aplay hotoke.wav", shell=True)    # オーディオファイル再生
     scrollphathd.write_string("Good Morning!! "+nowTimeString+"   ", brightness=0.5)
 
     # オートスクロールGoodMorning!!
